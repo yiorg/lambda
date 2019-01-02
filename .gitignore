@@ -1,0 +1,8 @@
+.DS_Store
+*.pyc
+*.idea
+**/mesa-commercial-use/
+*.h5
+random
+jena_climate
+NEWCASTLE
