@@ -13,7 +13,7 @@ from keras.layers import LSTM
 
 data_dir = 'mesa-commercial-use/synced/'
 file_list = sorted(filter(lambda x: '.csv' in x, os.listdir(data_dir)))
-params = {'look_back': 20,
+params = {'look back': 20,
           'step': 1,
           'delay': -10,
           'batch size': 128,
@@ -30,20 +30,20 @@ params = {'look_back': 20,
 }
 
 # params
-look_back = 20                          # how many steps to look back from current point
-step = 1                                # number of steps between samples
-delay = -10                             # delay between current time and the time of the predicted label
-batch_size = 128                        # number of samples in a batch
-input_cols = 1                          # number of input columns
-num_train_subs = 1#1300                 # number of subjects to train on
-num_test_subs = 1#300                   # number of subjects to test on
-epochs = 2#20                           # number of epochs
-nodes = 64                              # number of nodes in the network
-steps_per_epoch = 10#500                # number of steps per epoch
-enable_plots = False                    # plot?
-optimizer = 'adam'                      # kind of optimizer
-loss = 'binary_crossentropy'            # loss function
-metrics = ['accuracy']                  # metrics to be recorded while training/testing
+look_back = params['look back']     # how many steps to look back from current point
+step = params['step']       # number of steps between samples
+delay = params['delay']     # delay between current time and the time of the predicted label
+batch_size = params['batch size']       # number of samples in a batch
+input_cols = params['input columns']        # number of input columns
+num_train_subs = params['number of training subjects']      # number of subjects to train on
+num_test_subs = params['number of testing subjects']        # number of subjects to test on
+epochs = params['epochs']       # number of epochs
+nodes = params['nodes']     # number of nodes in the network
+steps_per_epoch = params['steps per epoch']     # number of steps per epoch
+enable_plots = params['enable plots']       # plot?
+optimizer = params['optimizer']     # kind of optimizer
+loss = params['loss']       # loss function
+metrics = params['metrics']     # metrics to be recorded while training/testing
 
 
 print "Defining model..."
@@ -124,5 +124,5 @@ model.save("{}/model.h5".format(curr_time))
 with open('{}/params.txt'.format(curr_time), 'w+') as f:
     f.write(json.dumps(params))
 with open('{}/results.txt'.format(curr_time), 'w+') as f:
-    f.write("Average accuracy: {}".format(acc))
-    f.write("Average loss: {}".format(loss))
+    f.write("Average accuracy: {}\n".format(acc))
+    f.write("Average loss: {}\n".format(loss))
