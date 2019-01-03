@@ -45,9 +45,7 @@ class Generator:
         """
         if max_index is None:
             if delay > 0:
-                max_index = len(self.data) - delay - 1  # subtract delay(if positive) so we don't overshoot the index
-            else:
-                max_index = len(self.data) - 1
+                max_index = len(self.data) - max(0, delay) - 1  # subtract delay(if +) so we don't overshoot the index
         idx = min_index + look_back
         while True:
             if shuffle:

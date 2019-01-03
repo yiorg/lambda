@@ -1,4 +1,5 @@
 import os
+import json
 import numpy as np
 import matplotlib.pyplot as plt
 import datetime
@@ -12,20 +13,37 @@ from keras.layers import LSTM
 
 data_dir = 'mesa-commercial-use/synced/'
 file_list = sorted(filter(lambda x: '.csv' in x, os.listdir(data_dir)))
-look_back = 20
-step = 1
-delay = 0
-batch_size = 128
-input_cols = 1
-num_train_subs = 50
-num_test_subs = 10
-epochs = 10
-nodes = 32
-steps_per_epoch = 100
-enable_plots = False
-optimizer = 'adam'
-loss = 'mean_squared_error'
-metrics = ['accuracy']
+params = {'look_back': 20,
+          'step': 1,
+          'delay': -10,
+          'batch size': 128,
+          'input columns': 1,
+          'number of training subjects': 1300,
+          'number of testing subjects': 300,
+          'epochs': 20,
+          'nodes': 64,
+          'steps per epoch': 500,
+          'enable plots': False,
+          'optimizer': 'adam',
+          'loss': 'binary_crossentropy',
+          'metrics': ['accuracy']
+}
+
+# params
+look_back = 20                          # how many steps to look back from current point
+step = 1                                # number of steps between samples
+delay = -10                             # delay between current time and the time of the predicted label
+batch_size = 128                        # number of samples in a batch
+input_cols = 1                          # number of input columns
+num_train_subs = 1#1300                 # number of subjects to train on
+num_test_subs = 1#300                   # number of subjects to test on
+epochs = 2#20                           # number of epochs
+nodes = 64                              # number of nodes in the network
+steps_per_epoch = 10#500                # number of steps per epoch
+enable_plots = False                    # plot?
+optimizer = 'adam'                      # kind of optimizer
+loss = 'binary_crossentropy'            # loss function
+metrics = ['accuracy']                  # metrics to be recorded while training/testing
 
 
 print "Defining model..."
@@ -43,7 +61,7 @@ for i, f in enumerate(file_list):
         f_name = os.path.join(data_dir, f)
         gen = Generator(f_name, source='MESA')
         max_train_ind = len(gen.data) * 4 // 5
-        max_val_ind = len(gen.data)
+        max_val_ind = len(gen.data) - max((0, delay))
         val_steps = (max_val_ind - max_train_ind + 1 - look_back)
         train_gen = gen.flow(look_back=look_back,
                              delay=delay,
@@ -96,7 +114,15 @@ metrics_list = np.array(metrics_list)
 average_metrics = metrics_list.mean(axis=0)
 acc = average_metrics[1]
 loss = average_metrics[0]
+curr_time = str(datetime.datetime.now())[:-7]
 print "Average accuracy: {}".format(acc)
 print "Average loss: {}".format(loss)
-curr_time = str(datetime.datetime.now())[:-7]
-model.save("model {}.h5".format(curr_time))
+
+# save configuration
+os.mkdir(curr_time)
+model.save("{}/model.h5".format(curr_time))
+with open('{}/params.txt'.format(curr_time), 'w+') as f:
+    f.write(json.dumps(params))
+with open('{}/results.txt'.format(curr_time), 'w+') as f:
+    f.write("Average accuracy: {}".format(acc))
+    f.write("Average loss: {}".format(loss))
