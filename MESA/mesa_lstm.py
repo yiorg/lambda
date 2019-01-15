@@ -5,8 +5,6 @@ import matplotlib.pyplot as plt
 import datetime
 from mesa_utils import Generator
 from keras.models import Sequential, load_model
-from keras import layers
-from keras.layers import Embedding
 from keras.layers import Dense
 from keras.layers import LSTM
 
@@ -20,14 +18,13 @@ params = {'look back': 20,
           'input columns': 1,
           'number of training subjects': 1300,
           'number of testing subjects': 300,
-          'epochs': 20,
+          'epochs': 10,
           'nodes': 64,
-          'steps per epoch': 500,
+          'steps per epoch': 100,
           'enable plots': False,
           'optimizer': 'adam',
-          'loss': 'binary_crossentropy',
-          'metrics': ['accuracy']
-}
+          'loss': 'mse',
+          'metrics': ['accuracy']}
 
 # params
 look_back = params['look back']     # how many steps to look back from current point
