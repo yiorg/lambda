@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import os
 
 
 class Generator:
@@ -62,3 +63,12 @@ class Generator:
                 samples[j] = self.data[:, 0:-1][indices]
                 targets[j] = self.data[rows[j] + delay][1]
             yield samples, targets
+
+def qc():
+    data_dir = 'mesa-commercial-use/synced/'
+    file_list = sorted(filter(lambda x: '.csv' in x, os.listdir(data_dir)))
+    for i, f in enumerate(file_list):
+        df = pd.read_csv(data_dir + f, header=None, usecols=[2, 4], skiprows=1, delimiter=',').values
+        if df[:, 0].sum() == 0:
+            print "Unusable subject file: {}".format(f)
+
