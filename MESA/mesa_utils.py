@@ -64,6 +64,7 @@ class Generator:
                 targets[j] = self.data[rows[j] + delay][1]
             yield samples, targets
 
+
 def qc():
     data_dir = 'mesa-commercial-use/synced/'
     file_list = sorted(filter(lambda x: '.csv' in x, os.listdir(data_dir)))
