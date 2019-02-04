@@ -1,1 +1,0 @@
-{"optimizer": "adam", "loss": "mse", "epochs": 10, "step": 1, "enable plots": false, "steps per epoch": 100, "input columns": 1, "metrics": ["accuracy"], "number of testing subjects": 300, "look back": 20, "delay": -10, "number of training subjects": 1300, "batch size": 128, "nodes": 64}
